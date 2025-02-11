@@ -810,23 +810,23 @@
 					tablinks[i].classList.remove('active')
 				}
 
-				// Показываем текущую вкладку и добавляем класс 'active'
+
 				document.getElementById(tabName).style.display = 'flex'
 				document.getElementById(tabName).classList.add('active')
 				button.classList.add('active')
 
-				// Скроллим страницу
+
 				if (tabName === 'Games') {
 					window.scrollTo({ top: 45, behavior: 'smooth' })
 				} else {
 					window.scrollTo({ top: 0, behavior: 'smooth' })
 				}
 
-				// Обрабатываем вкладку 'About'
+
 				if (tabName === 'About') {
 					var newAboutGif = aboutGif.cloneNode(true)
 					aboutGif.parentNode.replaceChild(newAboutGif, aboutGif)
-					aboutGif = newAboutGif // обновляем ссылку на новый элемент
+					aboutGif = newAboutGif 
 					aboutAudio.play()
 				} else {
 					aboutAudio.pause()
