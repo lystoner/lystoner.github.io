@@ -26,6 +26,11 @@
 			     -webkit-tap-highlight-color: transparent;
 			     -webkit-touch-callout: none;
 			     scroll-behavior: smooth;
+				 box-sizing: border-box;
+				 padding-bottom: 0;
+			 }
+			 body.fullscreen header{
+				padding-top: 40px;
 			 }
 			 @keyframes Gradient {
 			     0% { background-position: 0% 50%; }
@@ -875,6 +880,9 @@
 
 			window.Telegram.WebApp.lockOrientation();
 			window.Telegram.WebApp.disableVerticalSwipes();
+			if (window.Telegram.WebApp.isFullscreen()){
+				$('body').addClass('fullscreen')
+			}
 			function showSlides(n) {
 				var i
 				var slides = document.getElementsByClassName('slide')
