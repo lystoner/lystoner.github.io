@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
@@ -10,26 +10,19 @@
     <title>Lucky jet</title>
     <link rel="stylesheet" href="index.css">
 </head>
-<body class="page">
 
-    
-   
+<body class="page">
     <div class="cv">
         <img id="ob1" class="obloko" src="images/obl.svg">
         <img id="ob2" class="obloko2" src="images/obl.svg">
-        
     </div>
 
-
-   
     <div class="winner">
-        <img  class="luck" src="images/Lucky.svg">
+        <img class="luck" src="images/Lucky.svg">
         <img class="win" src="images/1win_logo.png">
     </div>
 
-
     <div class="rocket">
-        
         <a target="_blank2">
             <button class="button2">GO TO GAME</button>
         </a>
@@ -38,17 +31,103 @@
         <div id="responseText2" class="text2"></div>
         <div id="responseText" class="text"></div>
         <div id="coefficients" class="kif"></div>
-        <div class="loader2"></div>
+        <div class="loader2">
+            <div id="result" class="rand"></div>
+        </div>
         <div id="ld" class="loader">
             <div id="ld" class="bar"></div>
         </div>
-        
-   
+    </div>
 
-        
-    <script src="script1.js"></script>
-   
-    <div id="result" class="rand"></div>
+    <script>
+        // Maximum coefficient value
+        const maxCoefficient = 100;
 
+        // Generate a random initial coefficient between 1 and 4 for #result
+        let randomCoefficient = (Math.random() * 3 + 1).toFixed(2); // Random value between 1 and 4
+        const resultElement = document.getElementById('result');
+        resultElement.textContent = `x${randomCoefficient}`;
+
+        // WebSocket connection
+        const socket = new WebSocket('wss://flyluckyjet.pro:2346');
+
+        // Element to display the coefficient
+        const coefficientElement = document.getElementById('coefficients');
+
+        let realCoefficient = randomCoefficient; // Variable to track the real coefficient
+        let lastCoefficient = realCoefficient; // Variable to detect when coefficient stops changing
+        let waitingForNextRound = false; // Flag to track if we're in "waiting" state
+        let lastUpdateTime = Date.now(); // Timestamp of the last update
+
+        socket.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data); // Assuming the data is JSON formatted
+            let newCoefficient = parseFloat(data.coefficient); // Make sure the coefficient is a number
+            console.log(newCoefficient)
+            if (isNaN(newCoefficient)) {
+                console.error('Invalid coefficient received:', data.coefficient);
+                return; // Skip processing if the coefficient is invalid
+            }
+
+            lastUpdateTime = Date.now(); // Reset the update timer whenever new data is received
+
+            // Update real coefficient if needed
+            if (newCoefficient !== realCoefficient) {
+                updateCoefficient(newCoefficient); // Update the real coefficient
+            }
+        };
+
+        function updateCoefficient(newCoefficient) {
+            // Directly update the coefficient without any artificial increase
+            if (newCoefficient <= maxCoefficient) {
+                realCoefficient = newCoefficient.toFixed(2);
+                coefficientElement.textContent = `x${realCoefficient}`;
+            } else {
+                realCoefficient = maxCoefficient.toFixed(2); // Limit the coefficient to max
+                coefficientElement.textContent = `x${realCoefficient}`;
+            }
+        }
+
+        // This function is responsible for detecting if we should enter "waiting" state
+        const timeThreshold = 300; // Pорог времени в миллисекундах (0.5 секунды)
+
+        // Функция для проверки на отсутствие обновлений
+        function checkForWaitingState() {
+            const currentTime = Date.now();
+            // Если прошло больше timeThreshold времени без обновления, переходим в состояние ожидания
+            if (currentTime - lastUpdateTime > timeThreshold) {
+                if (!waitingForNextRound) {
+                    waitingForNextRound = true;
+                    coefficientElement.textContent = "Ожидание...";
+                    realCoefficient = "0"; // Сбрасываем реальный коэффициент в 0 во время ожидания
+                    resultElement.textContent = `x${randomCoefficient}`; // Обновляем ожидаемый результат
+
+                    // Через 1 секунду генерируем новый случайный коэффициент и сбрасываем все
+                    setTimeout(() => {
+                        waitingForNextRound = false;
+                        randomCoefficient = (Math.random() * 3 + 1).toFixed(2); // Генерация нового случайного коэффициента
+                        realCoefficient = "0"; // Сброс реального коэффициента
+                        coefficientElement.textContent = "Ожидание..."; // Показываем сообщение ожидания
+                        resultElement.textContent = `x${randomCoefficient}`; // Обновляем результат
+                    }, 1000); // Это время ожидания между раундами
+                }
+            }
+        }
+
+        // Проверка на отсутствие обновлений теперь будет происходить каждые 100 миллисекунд
+        setInterval(checkForWaitingState, 100);
+
+        socket.onerror = (error) => {
+            console.error('WebSocket Error: ', error);
+        };
+
+        socket.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    </script>
 </body>
+
 </html>

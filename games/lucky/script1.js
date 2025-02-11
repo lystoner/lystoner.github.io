@@ -99,7 +99,7 @@ function fetchDataAndUpdate() {
             const kef = parseFloat(data.current_coefficients);
             updateCoefficients(kef);
         })
-        .catch(error => console.error('Error fetching data:', error));
+        // .catch(error => console.error('Error fetching data:', error));
 }
 
 
