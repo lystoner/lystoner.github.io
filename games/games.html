@@ -595,6 +595,7 @@
 				width: 100%;
 				height: auto;
 				display: block;
+				color: rgba(50, 176, 255, 0.3);
         	}
 		</style>
 		<link rel="preconnect" href="https://fonts.googleapis.com">
@@ -767,6 +768,7 @@
 			>
 				<img src="./static/money.png" alt="Контакты" />
 			</button>
+
 		</div>
 		<canvas id="particleCanvas"></canvas>
 		<audio id="aboutAudio" src="/static/gif.mp3"></audio>
@@ -780,11 +782,12 @@
 			scrollingCanvas.height = window.innerHeight / 4; 
 			
 			const scrollingMessages = [
-				"Welcome to the future of AI.",
-				"Creativity has no limits.",
-				"Type, erase, evolve.",
-				"Innovation starts here.",
-				"The journey never ends."
+				"Добро пожаловать в будущее ИИ предсказаний.",
+				"Промокоды в канале.",
+				"Вероятность 90% +",
+				"Welcome to the future of AI predictions.",
+				"Catch the promo codes in the channel.",
+				"90% probability +"
 			];
 			
 			let scrollingMessageIndex = 0;
@@ -798,7 +801,7 @@
 				scrollingCtx.clearRect(0, 0, scrollingCanvas.width, scrollingCanvas.height);
 				
 				// Draw horizontal scan lines
-				scrollingCtx.strokeStyle = "rgba(50, 255, 50, 0.3)";
+				scrollingCtx.strokeStyle = "rgba(50, 176, 255, 0.3)";
 				for (let lineY = 0; lineY < scrollingCanvas.height; lineY += 3) {
 					scrollingCtx.beginPath();
 					scrollingCtx.moveTo(0, lineY);
@@ -813,9 +816,9 @@
 				
 				// Create gradient for better visibility on scan lines
 				let textGradient = scrollingCtx.createLinearGradient(0, 0, 0, scrollingCanvas.height);
-				textGradient.addColorStop(0, "rgba(50, 50, 255, 0.2)");
-				textGradient.addColorStop(0.5, "rgba(50, 50, 255, 1)");
-				textGradient.addColorStop(1, "rgba(50, 50, 255, 0.2)");
+				textGradient.addColorStop(0, "rgba(50, 176, 255, 0.2)");
+				textGradient.addColorStop(0.5, "rgba(50, 176, 255, 1)");
+				textGradient.addColorStop(1, "rgba(50, 176, 255, 0.2)");
 				scrollingCtx.fillStyle = textGradient;
 				
 				// Apply transparency based on scan lines
