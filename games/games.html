@@ -870,6 +870,9 @@
 					window.Telegram.WebApp.HapticFeedback.impactOccurred('medium')
 				}
 			}
+			window.telegram.WebApp.requestFullscreen();
+			window.telegram.WebApp.lockOrientation();
+			window.telegram.WebApp.disableVerticalSwipes();
 			function showSlides(n) {
 				var i
 				var slides = document.getElementsByClassName('slide')
